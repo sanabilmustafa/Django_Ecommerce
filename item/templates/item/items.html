@@ -1,0 +1,48 @@
+{% extends "core/base.html" %}
+{% block title %}Items{% endblock title %}
+{% block content %}
+    <div class="pb-6 py-10 px-28 p-2 grid grid-cols-6 gap-4 bg-gray-100">
+        <div class="col-span-1">
+            <form method="get" action="{% url 'item:items' %}" class="flex">
+                <input type="text" name="query" class="w-full py-3 px-3 border rounded-md text-sm" value="{{query}}" placeholder="Find a bike, a chair or car...">
+                <button class="ml-2 p-3 rounded-full texy-lg bg-black hover:bg-gray-700  text-white "><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+            <hr class="my-5">
+            <p class="font-bold text-xl mb-2">Categories</p>
+            <ul>
+                {% for category in categories %}
+                    <li class="py-2 px-2 rounded-xl {% if category.id == category_id %}bg-gray-200{% endif %}">
+                        <a href="{% url 'item:items' %}?query={{query}}&category={{category.id}}">{{ category.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <hr class="my-6">
+            <p class="font-semibold text-center" >Clear Filters</p>
+            <ul>
+                <li>
+                    <a href="{% url 'item:items' %}" class="mt-2 py-3 px-5 w-full inline-block bg-gray-950 text-lg text-center rounded-xl text-white">Clear</a>
+                </li>
+            </ul>
+        </div>
+{% comment %} products start {% endcomment %}
+        <div class="col-span-5">
+            <div class="grid grid-cols-4 gap-3 ">
+                {% for item in items  %}
+                    <div class="hover:shadow-lg">
+                        <a href="{% url 'item:detail' item.id %}">
+                            <div class="w-100% image-container h-72 overflow-hidden"> 
+                                <img src="{{item.image.url}}" alt="image" class="rounded-t-xl bg-contain w-full h-auto">
+                            </div>
+    
+                            <div class="p-6 bg-white rounded-b-xl">
+                                <h2 class="text-2xl capitalize ">{{item.name}}</h2>
+                                <p class="text-gray-400">Price: {{item.price}}</p>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+{% comment %} products end {% endcomment %}
+    </div>
+{% endblock content %}
